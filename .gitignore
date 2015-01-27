@@ -17,6 +17,14 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+#编译目录
+Debug/
+Release/
+
+#VS用户工程文件
+*.sdf
+*.suo
+
 # =========================
 # Operating System Files
 # =========================
@@ -41,3 +49,4 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+*.opensdf

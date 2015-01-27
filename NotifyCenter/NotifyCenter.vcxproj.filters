@@ -54,6 +54,18 @@
     <ClInclude Include="NotifyCenter.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="RValueRef.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="NotifyCenterFunctional.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="PostCmdEx.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="PostCmdExFunctional.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

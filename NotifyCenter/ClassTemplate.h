@@ -27,5 +27,3 @@ void myClass<T1, T2>::show( void )
 	cout << "t1=" << t1 << " t2=" << t2 << endl;
 }
 
-
-

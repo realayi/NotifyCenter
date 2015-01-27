@@ -5,6 +5,7 @@
 #include <iostream>
 #include <deque>
 #include <string>
+#include <functional>
 
 #include "ClassTemplate.h"
 #include "FuncTemplate.h"
@@ -15,6 +16,8 @@
 #include "max5.h"
 #include "refnonref.h"
 #include "NotifyCenter.h"
+#include "RValueRef.h"
+#include "PostCmdEx.h"
 
 using std::cout;
 using std::endl;
@@ -36,7 +39,7 @@ void funcInt(int a)
 	int i = a;
 	int j = ++i;
 }
-void funcInt2(int a)
+void funcInt2(int& a)
 {
 	int i = a;
 	int j = ++i;
@@ -46,7 +49,34 @@ void funcIntRef(int& a)
 {
 	int i = a;
 	int j = ++i;
+	++a;
 }
+
+void funcIntCRef(const int& a)
+{
+	int i = a;
+	int j = ++i;
+}
+
+class IntAdd
+{
+public:
+	void AddOne(int a)
+	{
+		a++;
+	}
+	void AddTwo(int a, int b)
+	{
+		a++;
+		b++;
+	}
+	void AddThree(int a, int b, int c)
+	{
+		a++;
+		b++;
+		c++;
+	}
+};
 
 using namespace std::placeholders;
 
@@ -123,23 +153,45 @@ int _tmain(int argc, _TCHAR* argv[])
 //	auto stWrapped1 = wrapped1<int>(b);
 	std::function<void(int&)> c = funcIntRef;
 
-	std::function<void(int)> d = std::bind(funcInt2, _1);
-	d(1000);
+// 	std::function<void(int)> d = NC::bind(funcInt2, _1);
+// 	d(1000);
 
-	std::cout << typeid(d).name() << std::endl;
-	std::cout << typeid(std::bind(funcInt2, _1)).name() << std::endl;
+//	std::cout << typeid(d).name() << std::endl;
+//	std::cout << typeid(NC::bind(funcInt2, _1)).name() << std::endl;
 
-	g_objCmdMgr.AddListener(0, a);
-	g_objCmdMgr.AddListener(1, b);
+// 	g_objEventMgr.AddListener(100, a);
+// 	g_objEventMgr.AddListener(100, NC::bind(&func0));
+// 	g_objEventMgr.AddListener(101, NC::bind(b, NC::arg<int>(1)));
+ 	g_objEventMgr.AddListener(101, NC::bind(&funcIntRef, NC::argref<int>(1)));
+// 	
+// 	IntAdd addObj;
+// 	g_objEventMgr.AddListener(101, NC::bind(&IntAdd::AddOne, &addObj, NC::arg<int>(1)));
+// 	g_objEventMgr.AddListener(101, NC::bind(&IntAdd::AddTwo, &addObj, NC::arg<int>(1), NC::arg<int>(2)));
+// 	g_objEventMgr.AddListener(101, NC::bind(&IntAdd::AddThree,
+// 		&addObj, NC::arg<int>(1), NC::arg<int>(2), NC::arg<int>(3)));
+
+	g_objEventMgr.AddListener(101, NC::bind(&funcIntCRef, NC::argcref<int>(1)));
+
 //	g_objCmdMgr.AddListener(1, d);
-//	g_objCmdMgr.AddListener(1, std::bind(funcInt2, _1));
+//	g_objCmdMgr.AddListener(1, NC::bind(funcInt2, _1));
 
-	NotifyMsg0(0);
-	NotifyMsg1(1, 1, 2);
+//	NotifyMsg0(100);
+	NotifyMsg1(101, 100000);
+//	NotifyMsg1(1, 1, 2);
 //	NotifyMsg1(1, 1.2f);
 
 // 	g_objCmdMgr.AddListener(2, c);
 // 	NotifyMsg1(2, 100);
+
+//	std::function<void(void)> fVoid = NC::bind(funcInt2, arg<int>());
+//	std::function<void(int&)> fVoid = NC::bind(funcInt2, _1);
+//	fVoid();
+//	std::_Nil
+
+	TestRValueRef();
+
+// 	g_objCmdMgr.AddListener(100, postcmdex::bind(&funcIntRef, postcmdex::argref<int>()));
+// 	PostCmdEx(100, 1000000);
 
 	system("Pause");
 	return 0;

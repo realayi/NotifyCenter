@@ -83,8 +83,12 @@
     <ClInclude Include="FuncTemplate.h" />
     <ClInclude Include="max5.h" />
     <ClInclude Include="NotifyCenter.h" />
+    <ClInclude Include="NotifyCenterFunctional.h" />
+    <ClInclude Include="PostCmdEx.h" />
+    <ClInclude Include="PostCmdExFunctional.h" />
     <ClInclude Include="refnonref.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="RValueRef.h" />
     <ClInclude Include="Stack.h" />
     <ClInclude Include="stack2.h" />
     <ClInclude Include="stack3.h" />
