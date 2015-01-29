@@ -159,18 +159,18 @@ int _tmain(int argc, _TCHAR* argv[])
 //	std::cout << typeid(d).name() << std::endl;
 //	std::cout << typeid(NC::bind(funcInt2, _1)).name() << std::endl;
 
-// 	g_objEventMgr.AddListener(100, a);
-// 	g_objEventMgr.AddListener(100, NC::bind(&func0));
-// 	g_objEventMgr.AddListener(101, NC::bind(b, NC::arg<int>(1)));
- 	g_objEventMgr.AddListener(101, NC::bind(&funcIntRef, NC::argref<int>(1)));
+// 	g_objNotifyCenter.AddListener(100, a);
+// 	g_objNotifyCenter.AddListener(100, NC::bind(&func0));
+// 	g_objNotifyCenter.AddListener(101, NC::bind(b, NC::arg<int>(1)));
+ 	g_objNotifyCenter.AddListener(101, NC::bind(&funcIntRef, NC::argref<int>(1)));
 // 	
 // 	IntAdd addObj;
-// 	g_objEventMgr.AddListener(101, NC::bind(&IntAdd::AddOne, &addObj, NC::arg<int>(1)));
-// 	g_objEventMgr.AddListener(101, NC::bind(&IntAdd::AddTwo, &addObj, NC::arg<int>(1), NC::arg<int>(2)));
-// 	g_objEventMgr.AddListener(101, NC::bind(&IntAdd::AddThree,
+// 	g_objNotifyCenter.AddListener(101, NC::bind(&IntAdd::AddOne, &addObj, NC::arg<int>(1)));
+// 	g_objNotifyCenter.AddListener(101, NC::bind(&IntAdd::AddTwo, &addObj, NC::arg<int>(1), NC::arg<int>(2)));
+// 	g_objNotifyCenter.AddListener(101, NC::bind(&IntAdd::AddThree,
 // 		&addObj, NC::arg<int>(1), NC::arg<int>(2), NC::arg<int>(3)));
 
-	g_objEventMgr.AddListener(101, NC::bind(&funcIntCRef, NC::argcref<int>(1)));
+	g_objNotifyCenter.AddListener(101, NC::bind(&funcIntCRef, NC::argcref<int>(1)));
 
 //	g_objCmdMgr.AddListener(1, d);
 //	g_objCmdMgr.AddListener(1, NC::bind(funcInt2, _1));

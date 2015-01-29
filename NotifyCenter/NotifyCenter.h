@@ -554,101 +554,51 @@ namespace NC
 	};
 };
 
-#define g_objEventMgr							(NC::CmdMgr::GetInstance())
+#define g_objNotifyCenter							(NC::CmdMgr::GetInstance())
 
 #ifdef _DEBUG
 #define NotifyMsg0(dwCommand) \
-	(g_objEventMgr.Notify_dbg((dwCommand), \
+	(g_objNotifyCenter.Notify_dbg((dwCommand), \
 	NC::_Nil_obj,NC::_Nil_obj,NC::_Nil_obj,NC::_Nil_obj,NC::_Nil_obj, \
 	__FILE__, __LINE__))
 #define NotifyMsg1(dwCommand,n1) \
-	(g_objEventMgr.Notify_dbg((dwCommand), \
+	(g_objNotifyCenter.Notify_dbg((dwCommand), \
 	(n1),NC::_Nil_obj,NC::_Nil_obj,NC::_Nil_obj,NC::_Nil_obj, \
 	__FILE__, __LINE__))
 #define NotifyMsg2(dwCommand,n1,n2) \
-	(g_objEventMgr.Notify_dbg((dwCommand), \
+	(g_objNotifyCenter.Notify_dbg((dwCommand), \
 	(n1),(n2),NC::_Nil_obj,NC::_Nil_obj,NC::_Nil_obj, \
 	__FILE__, __LINE__))
 #define NotifyMsg3(dwCommand,n1,n2,n3) \
-	(g_objEventMgr.Notify_dbg((dwCommand), \
+	(g_objNotifyCenter.Notify_dbg((dwCommand), \
 	(n1),(n2),(n3),NC::_Nil_obj,NC::_Nil_obj, \
 	__FILE__, __LINE__))
 #define NotifyMsg4(dwCommand,n1,n2,n3,n4) \
-	(g_objEventMgr.Notify_dbg((dwCommand), \
+	(g_objNotifyCenter.Notify_dbg((dwCommand), \
 	(n1),(n2),(n3),(n4),NC::_Nil_obj, \
 	__FILE__, __LINE__))
 #define NotifyMsg5(dwCommand,n1,n2,n3,n4,n5) \
-	(g_objEventMgr.Notify_dbg((dwCommand), \
+	(g_objNotifyCenter.Notify_dbg((dwCommand), \
 	(n1),(n2),(n3),(n4),(n5), \
 	__FILE__, __LINE__))
 #else
 #define NotifyMsg0(dwCommand) \
-	(g_objEventMgr.Notify((dwCommand), \
+	(g_objNotifyCenter.Notify((dwCommand), \
 	NC::_Nil_obj,NC::_Nil_obj,NC::_Nil_obj,NC::_Nil_obj,NC::_Nil_obj))
 #define NotifyMsg1(dwCommand,n1) \
-	(g_objEventMgr.Notify((dwCommand), \
+	(g_objNotifyCenter.Notify((dwCommand), \
 	(n1),NC::_Nil_obj,NC::_Nil_obj,NC::_Nil_obj,NC::_Nil_obj))
 #define NotifyMsg2(dwCommand,n1,n2) \
-	(g_objEventMgr.Notify((dwCommand), \
+	(g_objNotifyCenter.Notify((dwCommand), \
 	(n1),(n2),NC::_Nil_obj,NC::_Nil_obj,NC::_Nil_obj))
 #define NotifyMsg3(dwCommand,n1,n2,n3) \
-	(g_objEventMgr.Notify((dwCommand), \
+	(g_objNotifyCenter.Notify((dwCommand), \
 	(n1),(n2),(n3),NC::_Nil_obj,NC::_Nil_obj))
 #define NotifyMsg4(dwCommand,n1,n2,n3,n4) \
-	(g_objEventMgr.Notify((dwCommand),(n1),(n2),(n3),(n4),NC::_Nil_obj)
+	(g_objNotifyCenter.Notify((dwCommand),(n1),(n2),(n3),(n4),NC::_Nil_obj)
 #define NotifyMsg5(dwCommand,n1,n2,n3,n4,n5) \
-	(g_objEventMgr.Notify((dwCommand),(n1),(n2),(n3),(n4),(n5))
+	(g_objNotifyCenter.Notify((dwCommand),(n1),(n2),(n3),(n4),(n5))
 #endif
-
-namespace NC
-{
-	template <typename T>
-	T GetCurrentArg(unsigned int Pos)
-	{
-		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		const NC::CmdInfo& info = g_objEventMgr.GetCurrentInfo();
-		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-		if (info.m_Argument.size() < Pos) {
-			std::cout << "--- 消息绑定函数的参数过多或者Notify中传入参数数目不够 ---" << std::endl;
-			std::cout << "消息编号：" << g_objEventMgr.GetCurrentCommand() << std::endl;
-			std::cout << "位置：" << info.m_szPosterFile << info.m_nPosterLine << std::endl;
-			throw;
-		}
-
-		--Pos;
-
-#ifdef _DEBUG
-		try {
-			return NC::any_cast<T>(info.m_Argument.at(Pos));
-		} catch (NC::bad_any_cast&) {
-			std::cout << "--- GetCurrentArg 参数类型不匹配 ---" << std::endl;
-			std::cout << "消息编号：" << g_objEventMgr.GetCurrentCommand() << std::endl;
-			std::cout << "位置：" << info.m_szPosterFile << info.m_nPosterLine << std::endl;
-			std::cout << "在Notify中传入参数位置" << Pos
-				<< "参数类型" << info.m_Argument.at(Pos).type().name() << std::endl;
-			std::cout << "实际需求的参数类型为" << typeid(T).name();
-			throw;
-		}
-#else
-		return NC::any_cast<T>(info.m_Argument.at(Pos));
-#endif
-	}
-
-	template <typename T>
-	T& GetCurrentArgRef(unsigned int Pos)
-	{
-		NC::reference_wrapper<T> r = GetCurrentArg<NC::reference_wrapper<T> >(Pos);
-		return r;
-	}
-
-	template <typename T>
-	const T& GetCurrentArgCRef(unsigned int Pos)
-	{
-		NC::reference_wrapper<const T> r = GetCurrentArg<NC::reference_wrapper<const T> >(Pos);
-		return r;
-	}
-}
 
 #include "NotifyCenterFunctional.h"
 

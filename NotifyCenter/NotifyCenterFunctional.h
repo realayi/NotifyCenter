@@ -3,6 +3,56 @@
 
 namespace NC
 {
+	template <typename T>
+	T GetCurrentArg(unsigned int Pos)
+	{
+		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		const NC::CmdInfo& info = g_objNotifyCenter.GetCurrentInfo();
+		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+		if (info.m_Argument.size() < Pos) {
+			std::cout << "--- 消息绑定函数的参数过多或者Notify中传入参数数目不够 ---" << std::endl;
+			std::cout << "消息编号：" << g_objNotifyCenter.GetCurrentCommand() << std::endl;
+			std::cout << "位置：" << info.m_szPosterFile << info.m_nPosterLine << std::endl;
+			throw;
+		}
+
+		--Pos;
+
+#ifdef _DEBUG
+		try {
+			return NC::any_cast<T>(info.m_Argument.at(Pos));
+		} catch (NC::bad_any_cast&) {
+			std::cout << "--- GetCurrentArg 参数类型不匹配 ---" << std::endl;
+			std::cout << "消息编号：" << g_objNotifyCenter.GetCurrentCommand() << std::endl;
+			std::cout << "位置：" << info.m_szPosterFile << info.m_nPosterLine << std::endl;
+			std::cout << "在Notify中传入参数位置" << Pos
+				<< "参数类型" << info.m_Argument.at(Pos).type().name() << std::endl;
+			std::cout << "实际需求的参数类型为" << typeid(T).name();
+			throw;
+		}
+#else
+		return NC::any_cast<T>(info.m_Argument.at(Pos));
+#endif
+	}
+
+	template <typename T>
+	T& GetCurrentArgRef(unsigned int Pos)
+	{
+		NC::reference_wrapper<T> r = GetCurrentArg<NC::reference_wrapper<T> >(Pos);
+		return r;
+	}
+
+	template <typename T>
+	const T& GetCurrentArgCRef(unsigned int Pos)
+	{
+		NC::reference_wrapper<const T> r = GetCurrentArg<NC::reference_wrapper<const T> >(Pos);
+		return r;
+	}
+}
+
+namespace NC
+{
 	// =============================================================================================================
 	//    template struct arg<T>
 	//    template struct argref<T>
